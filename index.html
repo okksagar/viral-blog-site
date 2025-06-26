@@ -32,6 +32,7 @@
       align-items: center;
       justify-content: center;
       margin-bottom: 50px;
+      cursor: grab;
     }
 
     .cube {
@@ -39,7 +40,7 @@
       height: 240px;
       position: relative;
       transform-style: preserve-3d;
-      transition: none;
+      transition: none; /* instant movement */
     }
 
     .face {
@@ -100,6 +101,41 @@
       margin-top: 20px;
       color: #777;
     }
+
+    /* Responsive tweaks */
+    @media (max-width: 600px) {
+      .cube, .face {
+        width: 180px;
+        height: 180px;
+      }
+
+      .face.front,
+      .face.back,
+      .face.right,
+      .face.left,
+      .face.top,
+      .face.bottom {
+        transform: translateZ(90px);
+      }
+
+      .scene {
+        height: 300px;
+      }
+
+      header {
+        font-size: 28px;
+        padding-top: 40px;
+      }
+
+      .footer-section h2 {
+        font-size: 20px;
+      }
+
+      .footer-section p {
+        font-size: 14px;
+        padding: 0 10px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -109,16 +145,14 @@
   </header>
 
   <div class="scene" id="scene">
-
-<div class="cube" id="cube">
-  <div class="face front" data-link="https://7bd1c57a-44ad-4b64-ae7a-f02e4bb21ab0-00-mhqckqhwuvxx.sisko.replit.dev/category.php?type=tech">Tech</div>
-  <div class="face back" data-link="https://7bd1c57a-44ad-4b64-ae7a-f02e4bb21ab0-00-mhqckqhwuvxx.sisko.replit.dev/category.php?type=news">News</div>
-  <div class="face right" data-link="https://7bd1c57a-44ad-4b64-ae7a-f02e4bb21ab0-00-mhqckqhwuvxx.sisko.replit.dev/category.php?type=finance">Finance</div>
-  <div class="face left" data-link="https://7bd1c57a-44ad-4b64-ae7a-f02e4bb21ab0-00-mhqckqhwuvxx.sisko.replit.dev/category.php?type=motivation">Motivation</div>
-  <div class="face top" data-link="https://7bd1c57a-44ad-4b64-ae7a-f02e4bb21ab0-00-mhqckqhwuvxx.sisko.replit.dev/category.php?type=health">Health</div>
-  <div class="face bottom" data-link="https://7bd1c57a-44ad-4b64-ae7a-f02e4bb21ab0-00-mhqckqhwuvxx.sisko.replit.dev/category.php?type=humor">Humor</div>
-</div>
-
+    <div class="cube" id="cube">
+      <div class="face front" data-link="https://7bd1c57a-44ad-4b64-ae7a-f02e4bb21ab0-00-mhqckqhwuvxx.sisko.replit.dev/category.php?type=tech">Tech</div>
+      <div class="face back" data-link="https://7bd1c57a-44ad-4b64-ae7a-f02e4bb21ab0-00-mhqckqhwuvxx.sisko.replit.dev/category.php?type=news">News</div>
+      <div class="face right" data-link="https://7bd1c57a-44ad-4b64-ae7a-f02e4bb21ab0-00-mhqckqhwuvxx.sisko.replit.dev/category.php?type=finance">Finance</div>
+      <div class="face left" data-link="https://7bd1c57a-44ad-4b64-ae7a-f02e4bb21ab0-00-mhqckqhwuvxx.sisko.replit.dev/category.php?type=motivation">Motivation</div>
+      <div class="face top" data-link="https://7bd1c57a-44ad-4b64-ae7a-f02e4bb21ab0-00-mhqckqhwuvxx.sisko.replit.dev/category.php?type=health">Health</div>
+      <div class="face bottom" data-link="https://7bd1c57a-44ad-4b64-ae7a-f02e4bb21ab0-00-mhqckqhwuvxx.sisko.replit.dev/category.php?type=humor">Humor</div>
+    </div>
   </div>
 
   <div class="footer-section">
@@ -134,6 +168,7 @@
     const scene = document.getElementById('scene');
     let startX, startY, rotateX = -20, rotateY = -20;
 
+    // Desktop interaction
     scene.addEventListener('mousedown', (e) => {
       startX = e.clientX;
       startY = e.clientY;
@@ -159,7 +194,27 @@
       scene.addEventListener('mouseup', onUp);
     });
 
-    // Navigate to category page
+    // Mobile interaction
+    let touchStartX, touchStartY;
+    scene.addEventListener("touchstart", function(e) {
+      const touch = e.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+    });
+
+    scene.addEventListener("touchmove", function(e) {
+      const touch = e.touches[0];
+      const dx = touch.clientX - touchStartX;
+      const dy = touch.clientY - touchStartY;
+      rotateY += dx * 0.3;
+      rotateX -= dy * 0.3;
+      cube.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+      e.preventDefault(); // Stop scrolling while swiping
+    }, { passive: false });
+
+    // Navigate on click
     document.querySelectorAll('.face').forEach(face => {
       face.addEventListener('click', () => {
         const link = face.dataset.link;
