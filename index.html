@@ -104,38 +104,45 @@
 
     /* Responsive tweaks */
     @media (max-width: 600px) {
-      .cube, .face {
-        width: 180px;
-        height: 180px;
-      }
+  .cube, .face {
+    width: 240px;
+    height: 240px;
+  }
 
-      .face.front,
-      .face.back,
-      .face.right,
-      .face.left,
-      .face.top,
-      .face.bottom {
-        transform: translateZ(90px);
-      }
+  .face.front,
+  .face.back,
+  .face.right,
+  .face.left,
+  .face.top,
+  .face.bottom {
+    transform: translateZ(120px);
+  }
 
-      .scene {
-        height: 300px;
-      }
+  .scene {
+    height: 100vh;
+    align-items: center;
+    margin-bottom: 0;
+  }
 
-      header {
-        font-size: 28px;
-        padding-top: 40px;
-      }
+  header {
+    font-size: 22px;
+    padding: 20px 10px 10px;
+  }
 
-      .footer-section h2 {
-        font-size: 20px;
-      }
+  .footer-section {
+    padding: 30px 15px 40px;
+  }
 
-      .footer-section p {
-        font-size: 14px;
-        padding: 0 10px;
-      }
-    }
+  .footer-section h2 {
+    font-size: 18px;
+  }
+
+  .footer-section p {
+    font-size: 14px;
+    padding: 0 10px;
+  }
+}
+
   </style>
 </head>
 <body>
